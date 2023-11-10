@@ -21,18 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
-package.path = package.path .. ";Mods\\BDL\\scripts\\?.lua;Mods\\BD_HudToggle\\?.lua" -- DO NOT REMOVE, required to include the BDL
+package.path = package.path .. ";Mods\\BDL\\scripts\\?.luaMods\\BD_DwarvenTrainer\\?.lua" -- DO NOT REMOVE, required to include the BDL
 
 require("chat_interface")
 require("chat_file_logger")
 require("player_interface")
 require("logger_init")
-require("hud")
-require("config")
-require("keybinding")
-require("game")
 
-version = "0.2"
+version = "0.1"
 introMessage = "Best Daniel mod, version: ".. version .. "\nLearn more at: \nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
 isIntroPrinted = false
 
@@ -58,54 +54,57 @@ end)
 -- Trigger by Key press
 -- ##############################
 
-RegisterKey(Keybinds, "HideHUD", function()
+
+RegisterKey(Keybinds, "FeedDwarf", function()
     ExecuteInGameThread(function()
         if not ChatIsChatWindowActive()
         then
     		PrintIntro()
-            ToggleUserHud()
+			PlayerSetFood(PlayerMainInit(), 100)
         end
     end)
 end)
 
-RegisterKey(Keybinds, "HideDwarf", function()
-    ExecuteInGameThread(function()  
+
+RegisterKey(Keybinds, "HealDwarf", function()
+    ExecuteInGameThread(function()
         if not ChatIsChatWindowActive()
         then
-            PrintIntro()
-            ToggleCharacterVisible()
+    		PrintIntro()
+			PlayerSetHealth(PlayerMainInit(), 100)
         end
     end)
 end)
 
 
-
-
---[[
-
-RegisterKey(Keybinds, "HideWaypoints", function()
+RegisterKey(Keybinds, "ListDwarves", function()
     ExecuteInGameThread(function()  
-		PrintIntro()
-        ToggleWaypoints()
+		if not ChatIsChatWindowActive()
+        then
+			ChatSendServer("Players currently online:")
+			local Players = PlayerGetAllPlayersRef()
+			for Index,Player in pairs(Players) do
+				ChatSendServer(string.format("Player: %s - %i health", PlayerGetName(Player), PlayerGetHealth(Player)))
+			end
+		end
     end)
 end)
 
-RegisterHook("/Script/Moria.MorOnWaypointUpdated__DelegateSignature", function(param1, param2)
+RegisterKey(Keybinds, "DwarfStats", function()
     ExecuteInGameThread(function()  
-        print("MorOnWaypointUpdated")
+		if not ChatIsChatWindowActive()
+        then
+			PrintIntro()
+			local PlayerRef = PlayerMainInit()
+			
+			ChatSendServer(string.format("Character Name: %s", PlayerGetName(PlayerRef)))
+			ChatSendServer(string.format("Is dead: " .. tostring(PlayerRef.bIsDead)))
+
+			ChatSendServer(string.format("Current health %i..",PlayerGetHealth(PlayerRef)))
+			ChatSendServer(string.format("Current Armor %i..",PlayerGetArmor(PlayerRef)))
+			ChatSendServer(string.format("Current Stamina %i..",PlayerGetStamina(PlayerRef)))
+			ChatSendServer(string.format("Max Health %i..",PlayerGetMaxHealth(PlayerRef)))
+			ChatSendServer(string.format("Max Stamina %i..",PlayerGetMaxStamina(PlayerRef)))
+		end
     end)
 end)
-
-RegisterHook("/Script/Moria.MorOnWaypointAdded__DelegateSignature", function(param1, param2)
-    ExecuteInGameThread(function()  
-        print("MorOnWaypointAdded")
-    end)
-end)
-
-RegisterHook("/Script/Moria.MorOnWaypointsRemoved__DelegateSignature", function(param1, param2)
-    ExecuteInGameThread(function()  
-        print("MorOnWaypointRemoved")
-    end)
-end)
-
---]]

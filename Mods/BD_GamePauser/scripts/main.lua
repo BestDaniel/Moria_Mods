@@ -24,14 +24,12 @@ SOFTWARE.
 package.path = package.path .. ";Mods\\BDL\\scripts\\?.lua" -- DO NOT REMOVE, required to include the BDL
 
 require("chat_interface")
-require("chat_file_logger")
-require("player_interface")
-require("logger_init")
-require("camera")
+require("game")
 
 version = "0.1"
 introMessage = "Best Daniel mod, version: ".. version .. "\nLearn more at: \nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
 isIntroPrinted = false
+isGamePaused = false
 
 function PrintIntro()
 	if isIntroPrinted == false
@@ -41,26 +39,25 @@ function PrintIntro()
 	end
 end
 
+RegisterKeyBind(Key.P, function()
+    ExecuteInGameThread(function()  
+		PrintIntro()
 
--- ##############################
--- Hook on load / reload
--- ##############################
+        -- Ensure the user isn't chatting in the chat window!
+        if not ChatIsChatWindowActive()
+        then
+            if(isGamePaused)
+            then
+                ChatSendServer("Game unpaused")
+            else
+                ChatSendServer("Game paused")
+            end
+    
+            isGamePaused = not isGamePaused
+    
+            GameTogglePauseServer()
+            
+        end
 
-RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
-
+    end)
 end)
-
-
--- ##############################
--- Trigger by Key press
--- ##############################
-
-RegisterKeyBind(Key.ADD, function()
-	CameraZoomIn()
-end)
-
-
-RegisterKeyBind(Key.SUBTRACT, function()
-	CameraZoomOut()
-end)
-

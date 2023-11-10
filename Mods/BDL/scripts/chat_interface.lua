@@ -81,3 +81,12 @@ function ChatGetAllChatDump()
     return chatWindowReference.chatlogString:ToString()
 end
 
+-- If the user is typing in the chat window, this will return TRUE, if it is not active, returns false
+function ChatIsChatWindowActive()
+    ChatWidget = FindFirstOf("WBP_UI_ChatWidget_C")
+    if not ChatWidget:IsValid()
+    then
+        error("Unable to find the Chat window widget.")
+    end
+    return ChatWidget.isChatActive
+end

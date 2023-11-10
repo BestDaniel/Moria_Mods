@@ -33,8 +33,8 @@ cameraLastFovChangeTick = 0
 function CameraFovChangeTooFast()
     EndTick = os.clock()
     ElapsedTick = EndTick - cameraLastFovChangeTick
-    print(string.format("Ticks:%f %f %f\n", ElapsedTick, EndTick, cameraLastFovChangeTick))
-    if ElapsedTick > 3
+    --print(string.format("Ticks:%f %f %f\n", ElapsedTick, EndTick, cameraLastFovChangeTick))
+    if ElapsedTick > 0.05
     then
         cameraLastFovChangeTick = EndTick
         return false
@@ -69,7 +69,9 @@ function CameraSetFOV(NewFov)
         if not CameraFovChangeTooFast()
         then
             CameraCurrentFov = NewFov
-            PlayerController:FOV(NewFov)               
+            ExecuteInGameThread(function()
+            PlayerController:FOV(NewFov)
+            end)             
         end
     end
 end

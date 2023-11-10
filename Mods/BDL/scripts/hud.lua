@@ -23,6 +23,7 @@ SOFTWARE.
 --]]
 
 require("chat_interface")
+require("player_interface")
 
 hudVisible = true
 hudCharacterVisible = true
@@ -64,13 +65,31 @@ function ToggleCharacterVisible()
     -- Check if got the HUD...if not....silently fail
     if PlayerController:IsValid()
     then
-        PlayerController:SetCinematicMode(hudCharacterVisible, VisibleFlag, false, false, false)
+        PlayerController:SetCinematicMode(hudCharacterVisible, VisibleFlag, true, true, true)
     end
 end
 
-function ToggleUserCombatHud()
-    UIManager = FindFirstOf("FGKUIManager")
+
+
+function ToggleUserMarkerHud()
+    
     hudCombatVisible = 0
+    PlayerController = FindFirstOf("BP_WaypointsManager_C")
+    PlayerController2 = FindFirstOf("PlayerController")
+    PlayerController2:ServerPause()
+  
+    MoriaHud = FindAllOf("WBP_MoriaHUD_C")
+
+
+
+    for Index,ref in pairs(MoriaHud) do
+        print(string.format("MorTutorialDisplay %s..\n", ref))
+        print(string.format("MorTutorialDisplay %s..\n", ref:GetFullName()))
+        ref:ToggleVisibility()
+        break
+    end
+
+    local PlayerRef = PlayerMainInit()
 
     if not hudCombatVisible
     then
@@ -80,16 +99,24 @@ function ToggleUserCombatHud()
         hudCombatVisible = false -- hiding the HUD
     end
 
+    if PlayerController:IsValid()
+    then
+        PlayerController['Toggle Visibility']()
+        --PlayerController:EnableCheats()
+    end
+
+    if DebugMenu:IsValid()
+    then
+        print("Toggle Invisbility")
+    end
+
     -- Check if got the HUD...if not....silently fail
-    if UIManager:IsValid()
+    if PlayerRef:IsValid()
     then
 
-			print(string.format("MorTutorialDisplay2 %s..\n", UIManager))
-			print(string.format("MorTutorialDisplay2 %s..\n", UIManager:GetFullName()))
-			print(string.format("MorTutorialDisplay2 %s..\n", UIManager.OverlayHuds[0]))
---			print(string.format("MorTutorialDisplay2 %s..\n", UIManager.UnderlayHuds[0]))
---            print(string.format("MorTutorialDisplay2 %s..\n", UIManager.OverlayHuds[0]:GetFullName()))
-			print(string.format("MorTutorialDisplay2 %s..\n", UIManager.UnderlayHuds[0]:Get():GetFullName()))
+			print(string.format("MorTutorialDisplay2 %s..\n", PlayerRef.WaypointSpawner))
+			print(string.format("MorTutorialDisplay2 %f..\n",  PlayerRef.MorOverheadIndicator:GetWindowVisiblility()))
+            PlayerRef.MorOverheadIndicator:SetWindowVisibility(0)
             --UIManager.UnderlayHuds[0]:Hide();
 
         --UIManager:SetHudVisibility(HudVisibleFlag)
