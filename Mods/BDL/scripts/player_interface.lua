@@ -66,18 +66,48 @@ function PlayerGetMaxStamina(PlayerRef)
     return actorAttributesRef:GetMaxStamina(PlayerRef)
 end
 
+function PlayerGetTemperature(PlayerRef)
+    return actorAttributesRef:GetTemperature(PlayerRef)
+end
+
+function PlayerGetMorale(PlayerRef)
+    return actorAttributesRef:GetMorale(PlayerRef)
+end
+
+function PlayerGetLight(PlayerRef)
+    return actorAttributesRef:GetLight(PlayerRef)
+end
+
+function PlayerGetEnergy(PlayerRef)
+    return actorAttributesRef:GetEnergy(PlayerRef)
+end
+
 function PlayerGetArmor(PlayerRef)
     return actorAttributesRef:GetArmor(PlayerRef)
 end
 
-function PlayerSetHealth(Playername, value)
-    PlayerRef = PlayerGetMainRef()
+function PlayerSetHealth(PlayerRef, value)
     PlayerRef.AttributeSet.Health.BaseValue = value
 end
 
-function PlayerSetFood(Playername, value)
-    PlayerRef = PlayerGetMainRef()
+function PlayerSetFood(PlayerRef, value)
     PlayerRef.AttributeSet.Food.BaseValue = value
+end
+
+function PlayerSetStamina(PlayerRef, value)
+    PlayerRef.AttributeSet.Stamina.BaseValue = value
+end
+
+function PlayerSetMorale(PlayerRef, value)
+    PlayerRef.AttributeSet.Morale.BaseValue = value
+end
+
+function PlayerSetEnergy(PlayerRef, value)
+    PlayerRef.AttributeSet.Energy.BaseValue = value
+end
+
+function PlayerSetTemperature(PlayerRef, value)
+    PlayerRef.AttributeSet.Temperature.BaseValue = value
 end
 
 function PlayerGetAllPlayersRef()
