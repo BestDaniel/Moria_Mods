@@ -43,6 +43,25 @@ function TimeDemo()
 
     print(string.format("GetTimeName %s\n",GameTimeManager:GetTimeName()))
 
+    local Day;
+    local Hour;
+    local Minute;
+    local bPM
+    local bTwentyFourHour = true
+
+
+    GameTimeManager:GetGameTime(bTwentyFourHour, Day, Hour, Minute, bPM);
+    print(string.format("GetTimeName %f %f %f\n",Day, Hour, Minute))
+
+    print(string.format("GetTimeName %s\n",GameTimeManager:GetTimeName():ToString()))
+
+
+    
+
+TestTime = GameTimeManager:GetTimeName():ToString()
+print(string.format("GetTimeName %s\n",GameTimeManager:GetTimeName():ToString()))
+
+
 
     if GameTimeManager:IsNighttime() then
         print("night time")
