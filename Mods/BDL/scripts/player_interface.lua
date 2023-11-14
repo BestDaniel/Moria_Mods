@@ -23,7 +23,19 @@ SOFTWARE.
 --]]
 
 function PlayerMainInit()
-    mainPlayerReference = FindFirstOf("BP_FGKDwarf_C")
+
+    -- Find the local player instead of depending on luck on the order of BP_FGKDwarf_C instances
+    local LocalPlayer = FindFirstOf("LocalPlayer")
+    if not LocalPlayer:IsValid() then
+		error("LocalPlayer's reference not found!!\n")        
+    end
+    local newPlayerController = LocalPlayer.PlayerController
+    if not newPlayerController:IsValid() then
+		error("LocalPlayer's Controller reference not found!!\n")        
+    end
+ 
+    mainPlayerReference = newPlayerController.Character
+
     if not mainPlayerReference:IsValid() 
 	then 
 		error("Player's reference not found!!\n")
@@ -110,6 +122,20 @@ function PlayerSetTemperature(PlayerRef, value)
     PlayerRef.AttributeSet.Temperature.BaseValue = value
 end
 
+function PlayerSetHealth(PlayerRef, value)
+    PlayerRef.AttributeSet.Health.BaseValue = value
+end
+
+
+function PlayerRevive(PlayerRef)
+    PlayerRef:ServerRevive()
+end
+
 function PlayerGetAllPlayersRef()
     return FindAllOf("BP_FGKDwarf_C")
+end
+
+function PlayerTotalPlayers()
+    local Players = FindAllOf("BP_FGKDwarf_C")
+    return #Players
 end

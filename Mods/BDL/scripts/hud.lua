@@ -26,7 +26,7 @@ require("chat_interface")
 require("player_interface")
 
 hudVisible = true
-hudCharacterVisible = true
+hudCharacterVisible = false -- For some reason this must start off as false
 hudCombatVisible = false
 
 

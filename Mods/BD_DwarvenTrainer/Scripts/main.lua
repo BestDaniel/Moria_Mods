@@ -21,14 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
-package.path = package.path .. ";Mods\\BDL\\scripts\\?.luaMods\\BD_DwarvenTrainer\\?.lua" -- DO NOT REMOVE, required to include the BDL
+package.path = package.path .. ";Mods\\BDL\\scripts\\?.lua" -- DO NOT REMOVE, required to include the BDL
+package.path = package.path .. ";Mods\\BD_DwarvenTrainer\\?.lua" -- DO NOT REMOVE, required to include key configuration file
 
 require("chat_interface")
 require("chat_file_logger")
 require("player_interface")
 require("logger_init")
+require("config") -- defines keys to bind to for mod
+require("keybinding")
 
-version = "0.1"
+version = "0.2"
 introMessage = "Best Daniel mod, version: ".. version .. "\nLearn more at: \nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
 isIntroPrinted = false
 
@@ -54,33 +57,51 @@ end)
 -- Trigger by Key press
 -- ##############################
 
-
 RegisterKey(Keybinds, "FeedDwarf", function()
-    ExecuteInGameThread(function()
-        if not ChatIsChatWindowActive()
-        then
-    		PrintIntro()
-			PlayerSetFood(PlayerMainInit(), 100)
-        end
+    ExecuteInGameThread(function()  
+        PrintIntro()
+        local PlayerRef = PlayerMainInit()
+        PlayerSetFood(PlayerRef, 100) -- 100 is the max food level, I think above this will be ignored by the game?
     end)
 end)
-
 
 RegisterKey(Keybinds, "HealDwarf", function()
-    ExecuteInGameThread(function()
-        if not ChatIsChatWindowActive()
-        then
-    		PrintIntro()
-			PlayerSetHealth(PlayerMainInit(), 100)
-        end
+    ExecuteInGameThread(function()  
+        PrintIntro()
+        local PlayerRef = PlayerMainInit()
+        PlayerSetHealth(PlayerRef, 100)
     end)
 end)
 
+RegisterKey(Keybinds, "GiveDwarfEnergy", function()
+    ExecuteInGameThread(function()  
+        PrintIntro()
+        local PlayerRef = PlayerMainInit()
+        PlayerSetEnergy(PlayerRef, 100) -- 100 is the max level, I think above this will be ignored by the game?
+    end)
+end)
+
+RegisterKey(Keybinds, "GiveDwarfStamina", function()
+    ExecuteInGameThread(function()  
+        PrintIntro()
+        local PlayerRef = PlayerMainInit()
+        PlayerSetStamina(PlayerRef, 100)
+    end)
+end)
+
+RegisterKey(Keybinds, "ReviveDwarf", function()
+    ExecuteInGameThread(function()  
+        PrintIntro()
+        local PlayerRef = PlayerMainInit()
+        PlayerRevive(PlayerRef)
+    end)
+end)
 
 RegisterKey(Keybinds, "ListDwarves", function()
-    ExecuteInGameThread(function()  
+    ExecuteInGameThread(function()    
 		if not ChatIsChatWindowActive()
         then
+            PrintIntro()
 			ChatSendServer("Players currently online:")
 			local Players = PlayerGetAllPlayersRef()
 			for Index,Player in pairs(Players) do

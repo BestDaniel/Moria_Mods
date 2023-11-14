@@ -22,11 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 package.path = package.path .. ";Mods\\BDL\\scripts\\?.lua" -- DO NOT REMOVE, required to include the BDL
+package.path = package.path .. ";Mods\\BD_GamePauser\\?.lua" -- DO NOT REMOVE, required to include key configuration file
 
+require("player_interface")
 require("chat_interface")
+require("config") -- defines keys to bind to for mod
+require("keybinding")
 require("game")
+require("utility")
 
-version = "0.1"
+version = "0.2"
 introMessage = "Best Daniel mod, version: ".. version .. "\nLearn more at: \nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
 isIntroPrinted = false
 isGamePaused = false
@@ -39,9 +44,14 @@ function PrintIntro()
 	end
 end
 
-RegisterKeyBind(Key.P, function()
+RegisterKey(Keybinds, "PauseGame", function()
     ExecuteInGameThread(function()  
 		PrintIntro()
+
+        if PlayerTotalPlayers() > 1 then
+            ChatSendServer("Error: Pausing not supported in multiplayer world.\n")
+            return
+        end
 
         -- Ensure the user isn't chatting in the chat window!
         if not ChatIsChatWindowActive()

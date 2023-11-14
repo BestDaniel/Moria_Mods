@@ -4,10 +4,13 @@
     Valid keys and modifier keys can be found at the bottom of this file.
 --]]
 Keybinds = {
-    ["HealDwarf"]                 = {["Key"] = Key.F6,             ["ModifierKeys"] = {}},
-    ["FeedDwarf"]               = {["Key"] = Key.F5,             ["ModifierKeys"] = {}},
-    ["ListDwarves"]           = {["Key"] = Key.F7,             ["ModifierKeys"] = {}},
-    ["DwarfStats"]           = {["Key"] = Key.F8,             ["ModifierKeys"] = {}},
+    ["HealDwarf"]            = {["Key"] = Key.F6,             ["ModifierKeys"] = {}},
+    ["FeedDwarf"]            = {["Key"] = Key.F5,             ["ModifierKeys"] = {}},
+    ["GiveDwarfStamina"]     = {["Key"] = Key.F7,             ["ModifierKeys"] = {}},
+    ["GiveDwarfEnergy"]      = {["Key"] = Key.F8,             ["ModifierKeys"] = {}},
+    ["ReviveDwarf"]          = {["Key"] = Key.F9,             ["ModifierKeys"] = {}},
+    ["ListDwarves"]          = {["Key"] = Key.F3,             ["ModifierKeys"] = {}},
+    ["DwarfStats"]           = {["Key"] = Key.F12,             ["ModifierKeys"] = {}},
 }
 
 

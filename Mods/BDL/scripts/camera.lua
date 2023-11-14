@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 local CameraCurrentFov = 90
-local CameraMaxFov = 150
+local CameraMaxFov = 140
 local CameraMinFov = 25
 cameraLastFovChangeTick = 0
 
@@ -33,8 +33,8 @@ cameraLastFovChangeTick = 0
 function CameraFovChangeTooFast()
     EndTick = os.clock()
     ElapsedTick = EndTick - cameraLastFovChangeTick
-    --print(string.format("Ticks:%f %f %f\n", ElapsedTick, EndTick, cameraLastFovChangeTick))
-    if ElapsedTick > 0.05
+
+    if ElapsedTick > 0.08
     then
         cameraLastFovChangeTick = EndTick
         return false
@@ -57,7 +57,6 @@ function CameraZoomOut()
     then
         CameraSetFOV(NewCameraFov)
     end
-    CameraSetFOV(NewCameraFov)
 end
 
 function CameraSetFOV(NewFov)
@@ -70,7 +69,7 @@ function CameraSetFOV(NewFov)
         then
             CameraCurrentFov = NewFov
             ExecuteInGameThread(function()
-            PlayerController:FOV(NewFov)
+                PlayerController:FOV(NewFov)
             end)             
         end
     end

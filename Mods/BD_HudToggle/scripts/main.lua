@@ -32,7 +32,7 @@ require("config")
 require("keybinding")
 require("game")
 
-version = "0.2"
+version = "0.3"
 introMessage = "Best Daniel mod, version: ".. version .. "\nLearn more at: \nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
 isIntroPrinted = false
 
@@ -77,35 +77,3 @@ RegisterKey(Keybinds, "HideDwarf", function()
         end
     end)
 end)
-
-
-
-
---[[
-
-RegisterKey(Keybinds, "HideWaypoints", function()
-    ExecuteInGameThread(function()  
-		PrintIntro()
-        ToggleWaypoints()
-    end)
-end)
-
-RegisterHook("/Script/Moria.MorOnWaypointUpdated__DelegateSignature", function(param1, param2)
-    ExecuteInGameThread(function()  
-        print("MorOnWaypointUpdated")
-    end)
-end)
-
-RegisterHook("/Script/Moria.MorOnWaypointAdded__DelegateSignature", function(param1, param2)
-    ExecuteInGameThread(function()  
-        print("MorOnWaypointAdded")
-    end)
-end)
-
-RegisterHook("/Script/Moria.MorOnWaypointsRemoved__DelegateSignature", function(param1, param2)
-    ExecuteInGameThread(function()  
-        print("MorOnWaypointRemoved")
-    end)
-end)
-
---]]

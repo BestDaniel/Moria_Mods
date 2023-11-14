@@ -22,12 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 package.path = package.path .. ";Mods\\BDL\\scripts\\?.lua" -- DO NOT REMOVE, required to include the BDL
+package.path = package.path .. ";Mods\\BD_CameraControl\\?.lua" -- DO NOT REMOVE, required to include key configuration file
 
 require("chat_interface")
 require("chat_file_logger")
 require("player_interface")
 require("logger_init")
 require("camera")
+require("config") -- defines keys to bind to for mod
+require("keybinding")
 
 version = "0.1"
 introMessage = "Best Daniel mod, version: ".. version .. "\nLearn more at: \nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
@@ -55,12 +58,14 @@ end)
 -- Trigger by Key press
 -- ##############################
 
-RegisterKeyBind(Key.ADD, function()
+RegisterKey(Keybinds, "ZoomIN", function()
+	PrintIntro()
 	CameraZoomIn()
 end)
 
 
-RegisterKeyBind(Key.SUBTRACT, function()
+RegisterKey(Keybinds, "ZoomOUT", function()
+	PrintIntro()
 	CameraZoomOut()
 end)
 
