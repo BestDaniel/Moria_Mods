@@ -65,7 +65,7 @@ function ToggleCharacterVisible()
     -- Check if got the HUD...if not....silently fail
     if PlayerController:IsValid()
     then
-        PlayerController:SetCinematicMode(hudCharacterVisible, VisibleFlag, true, true, true)
+        PlayerController:SetCinematicMode(hudCharacterVisible, VisibleFlag, false, false, false)
     end
 end
 
