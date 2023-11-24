@@ -22,6 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 
+require("player_interface")
+
 local CameraCurrentFov = 90
 local CameraMaxFov = 140
 local CameraMinFov = 25
@@ -60,7 +62,7 @@ function CameraZoomOut()
 end
 
 function CameraSetFOV(NewFov)
-    PlayerController = FindFirstOf("PlayerController")
+    PlayerController = PlayerGetMainControllerRef()
 
     -- Check if got the instance...if not....silently fail
     if PlayerController:IsValid()

@@ -27,6 +27,8 @@ SOFTWARE.
 chatInitialized = false
 chatRefInitialized = false
 
+local ChatColor = require("chat_color")
+
 -- Initializes all the dependencies used for the chat interface
 function ChatInit()
     -- Only initialize if it hasn't been initialzed yet!
@@ -43,7 +45,29 @@ function ChatInit()
 
 end
 
+--<p0> - orange text
+--<p1> - blue text
+--<p2> - yellow text
+--<p3> - green text
+--<p4> - purple text
+--<p5> - brown text
+--<p6> - teal text
+--<p7> - dark brown
+
 -- Sends the text to all connected clients
+function ChatSendServerColor(Color, colormsg, msg)
+    if ChatVerifyReference()
+    then
+        local FinalMessage = msg
+        if Color ~= ChatColor.NONE
+        then
+            FinalMessage = "<p" .. Color .. ">" .. colormsg .. "</>" .. msg
+        end
+        print(string.format("Sending chat message: %s %s", FinalMessage, Color))
+        chatManagerReference:ServerChat(FinalMessage)
+    end
+end
+
 function ChatSendServer(msg)
     if ChatVerifyReference()
     then

@@ -30,8 +30,9 @@ require("config") -- defines keys to bind to for mod
 require("keybinding")
 require("game")
 require("utility")
+require("ui")
 
-version = "0.2"
+version = "0.3"
 introMessage = "Best Daniel mod, version: ".. version .. "\nLearn more at: \nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
 isIntroPrinted = false
 isGamePaused = false
@@ -45,29 +46,33 @@ function PrintIntro()
 end
 
 RegisterKey(Keybinds, "PauseGame", function()
-    ExecuteInGameThread(function()  
-		PrintIntro()
 
-        if PlayerTotalPlayers() > 1 then
+    local PlayerCount = PlayerTotalPlayers()
+
+    -- Check if player is in the game / has chat window active or editing a mapstone name, if so, ignore the key press!
+    if PlayerCount == 0 or ChatIsChatWindowActive() or  IsPlayerEditingMapstoneName() 
+    then
+        return
+    end
+    
+    ExecuteInGameThread(function()
+        PrintIntro()
+
+        if PlayerCount > 1 then
             ChatSendServer("Error: Pausing not supported in multiplayer world.\n")
             return
         end
 
-        -- Ensure the user isn't chatting in the chat window!
-        if not ChatIsChatWindowActive()
+        if(isGamePaused)
         then
-            if(isGamePaused)
-            then
-                ChatSendServer("Game unpaused")
-            else
-                ChatSendServer("Game paused")
-            end
-    
-            isGamePaused = not isGamePaused
-    
-            GameTogglePauseServer()
-            
+            ChatSendServer("Game unpaused")
+        else
+            ChatSendServer("Game paused")
         end
-
+    
+        isGamePaused = not isGamePaused
+    
+        GameTogglePauseServer()
+    
     end)
 end)

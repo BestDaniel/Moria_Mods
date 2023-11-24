@@ -29,12 +29,12 @@ function PlayerMainInit()
     if not LocalPlayer:IsValid() then
 		error("LocalPlayer's reference not found!!\n")        
     end
-    local newPlayerController = LocalPlayer.PlayerController
-    if not newPlayerController:IsValid() then
+    mainPlayerController = LocalPlayer.PlayerController
+    if not mainPlayerController:IsValid() then
 		error("LocalPlayer's Controller reference not found!!\n")        
     end
  
-    mainPlayerReference = newPlayerController.Character
+    mainPlayerReference = mainPlayerController.Character
 
     if not mainPlayerReference:IsValid() 
 	then 
@@ -51,6 +51,13 @@ end
 
 function PlayerGetMainRef()
     return mainPlayerReference
+end
+
+function PlayerGetMainControllerRef()
+    if not mainPlayerController or not mainPlayerController:IsValid() then
+		PlayerMainInit()
+    end
+    return mainPlayerController
 end
 
 
@@ -137,5 +144,9 @@ end
 
 function PlayerTotalPlayers()
     local Players = FindAllOf("BP_FGKDwarf_C")
-    return #Players
+    local PlayerCount = 0
+    if Players ~= nil then
+        PlayerCount = #Players
+    end
+    return PlayerCount
 end
