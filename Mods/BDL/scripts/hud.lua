@@ -50,6 +50,7 @@ function ToggleUserHud()
 end
 
 function ToggleCharacterVisible()
+
     PlayerController = FindFirstOf("PlayerController")
 
     VisibleFlag = false

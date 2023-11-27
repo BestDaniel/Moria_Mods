@@ -22,22 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 package.path = package.path .. ";Mods\\BDL\\scripts\\?.lua" -- DO NOT REMOVE, required to include the BDL
-package.path = package.path .. ";Mods\\BD_GamePauser\\?.lua" -- DO NOT REMOVE, required to include key configuration file
+package.path = package.path .. ";Mods\\BD_PeacefulMode\\?.lua" -- DO NOT REMOVE, required to include key configuration file
 
-require("player_interface")
 require("chat_interface")
+require("player_interface")
+require("logger_init")
 require("config") -- defines keys to bind to for mod
 require("keybinding")
-require("game")
-require("utility")
 require("ui")
+
 local ChatColor = require("chat_color")
 
-version = "0.3"
+version = "0.1"
 introMessage = ChatColor.ORANGE .. "Best Daniel mod".. ChatColor.ENDCOLOR .." version: ".. version .. "\n"
-learnmoreMessage = ChatColor.BLUE .."Learn more at:"  .. ChatColor.ENDCOLOR .. "\nhttps://www.youtube.com/@bestdanielnet\n https://bestdaniel.net"
+learnmoreMessage = ChatColor.BLUE .."Learn more at:"  .. ChatColor.ENDCOLOR .. "\nhttps://bestdaniel.net"
 isIntroPrinted = false
-isGamePaused = false
+isGamePeacefulModeEnabled = false
+defaultTeam = 200 --high enough that a new monster team shouldn't end up using the same team!
 
 function PrintIntro()
 	if isIntroPrinted == false
@@ -48,7 +49,22 @@ function PrintIntro()
 	end
 end
 
-RegisterKey(Keybinds, "PauseGame", function()
+-- ##############################
+-- Hook on load / reload
+-- ##############################
+
+function RegisterPlayerJoinedHook()
+    
+    NotifyOnNewObject("/Game/Character/Dwarf/BP_FGKDwarf.BP_FGKDwarf_C", function(self)
+        print("New Character joined, setting team mode")
+        ExecuteWithDelay(10000,SetAllPlayersMode) -- delayed as character joining doesn't show up for a short period, not sure what happens if set their team too early
+    end)
+end
+
+-- ##############################
+-- Trigger by Key press
+-- ##############################
+RegisterKey(Keybinds, "TogglePeacefulMode", function()
 
     local PlayerCount = PlayerTotalPlayers()
 
@@ -57,25 +73,39 @@ RegisterKey(Keybinds, "PauseGame", function()
     then
         return
     end
-    
-    ExecuteInGameThread(function()
+
         PrintIntro()
+        
+        RegisterPlayerJoinedHook()
 
-        if PlayerCount > 1 then
-            ChatSendServer(ChatColor.Purple .. "Error: Pausing not supported in multiplayer world.\n" .. ChatColor.ENDCOLOR)
-            return
-        end
-
-        if(isGamePaused)
+        if(isGamePeacefulModeEnabled)
         then
-            ChatSendServer(ChatColor.GREEN .. "Game unpaused" .. ChatColor.ENDCOLOR)
+            ChatSendServer(ChatColor.ORANGE .. "Peaceful Mode Disabled" .. ChatColor.ENDCOLOR)
         else
-            ChatSendServer(ChatColor.GREEN .. "Game paused" .. ChatColor.ENDCOLOR)
+            ChatSendServer(ChatColor.GREEN .. "Peaceful Mode Activated" .. ChatColor.ENDCOLOR)
+
         end
     
-        isGamePaused = not isGamePaused
-    
-        GameTogglePauseServer()
-    
-    end)
+        isGamePeacefulModeEnabled = not isGamePeacefulModeEnabled
+
+        SetAllPlayersMode()
+
 end)
+
+function SetAllPlayersMode()
+    local NewTeam = 0
+    if(isGamePeacefulModeEnabled)
+    then
+        NewTeam = defaultTeam
+    end
+    SetAllPlayersTeam(NewTeam)
+end
+
+function SetAllPlayersTeam(Team)
+    local AllPlyayers = PlayerGetAllPlayersRef()
+   
+    for Index,Player in pairs(AllPlyayers) do
+        PlayerSetTeam(Player, Team)
+        print(string.format("Player %s is assigned team %f",  PlayerGetName(Player), Player.Team))
+    end
+end

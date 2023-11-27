@@ -45,6 +45,7 @@ function ChatInit()
 
 end
 
+
 --<p0> - orange text
 --<p1> - blue text
 --<p2> - yellow text
@@ -53,6 +54,14 @@ end
 --<p5> - brown text
 --<p6> - teal text
 --<p7> - dark brown
+function ChatCreateColorString(Color, Colormsg)
+    local FinalMessage = Colormsg
+    if Color ~= ChatColor.NONE
+    then
+        FinalMessage = "<p" .. Color .. ">" .. Colormsg .. "</>"
+    end
+    return FinalMessage
+end
 
 -- Sends the text to all connected clients
 function ChatSendServerColor(Color, colormsg, msg)

@@ -138,6 +138,10 @@ function PlayerRevive(PlayerRef)
     PlayerRef:ServerRevive()
 end
 
+function PlayerSetTeam(PlayerRef, TeamNumber)
+    PlayerRef:SetTeam(TeamNumber)
+end
+
 function PlayerGetAllPlayersRef()
     return FindAllOf("BP_FGKDwarf_C")
 end
