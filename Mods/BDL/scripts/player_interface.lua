@@ -66,7 +66,7 @@ function PlayerGetActorAttributesRef()
 end
 
 function PlayerGetName(PlayerRef)
-    return PlayerRef:GetCharacterName():ToString()
+    return PlayerRef:GetCharacterName(false):ToString()
 end
 
 function PlayerGetHealth(PlayerRef)
@@ -105,12 +105,25 @@ function PlayerGetArmor(PlayerRef)
     return actorAttributesRef:GetArmor(PlayerRef)
 end
 
+function PlayerGetMaxArmor(PlayerRef)
+    return actorAttributesRef:GetMaxArmor(PlayerRef)
+end
+
+function PlayerGetMaxHealth(PlayerRef)
+    return actorAttributesRef:GetMaxHealth(PlayerRef)
+end
+
 function PlayerSetHealth(PlayerRef, value)
     PlayerRef.AttributeSet.Health.BaseValue = value
 end
 
 function PlayerSetFood(PlayerRef, value)
     PlayerRef.AttributeSet.Food.BaseValue = value
+end
+
+function PlayerSetArmor(PlayerRef, value)
+    --PlayerRef.AttributeSet.Armor.BaseValue = value
+    PlayerRef.AttributeSet.Armor.CurrentValue = value
 end
 
 function PlayerSetStamina(PlayerRef, value)
@@ -134,6 +147,12 @@ function PlayerSetHealth(PlayerRef, value)
 end
 
 
+function PlayerKill(PlayerRef)
+    PlayerRef:SetIsDead(true)
+    PlayerRef:Die(true)
+    --HealthComp:SeSetIsDeadrver_Kill()
+end
+
 function PlayerRevive(PlayerRef)
     PlayerRef:ServerRevive()
 end
@@ -153,4 +172,29 @@ function PlayerTotalPlayers()
         PlayerCount = #Players
     end
     return PlayerCount
+end
+
+function PlayerGetPlayerByName(PlayerName)
+
+    local LowerPlayerName = PlayerName:lower()
+
+    local Players = PlayerGetAllPlayersRef()
+    for Index,PlayerRef in pairs(Players) do
+        local CurrentPlayerName = PlayerGetName(PlayerRef)
+        CurrentPlayerName = CurrentPlayerName:lower()
+        if(CurrentPlayerName == LowerPlayerName) then
+            return PlayerRef
+        end
+    end
+    return nil
+end
+
+
+function PlayerIsPlayerServerOwner(PlayerName)
+    local ServerPlayerRef = PlayerMainInit()
+    local ServerPlayerName = string.lower(PlayerGetName(ServerPlayerRef))
+    if ServerPlayerName == PlayerName then
+        return true
+    end
+    return false;
 end
