@@ -6,11 +6,11 @@
 Keybinds = {
     ["HealDwarf"]            = {["Key"] = Key.F6,             ["ModifierKeys"] = {}},
     ["FeedDwarf"]            = {["Key"] = Key.F5,             ["ModifierKeys"] = {}},
-    ["GiveDwarfStamina"]     = {["Key"] = Key.F7,             ["ModifierKeys"] = {}},
+    ["GiveDwarfStamina"]     = {["Key"] = Key.F3,             ["ModifierKeys"] = {}},
     ["GiveDwarfEnergy"]      = {["Key"] = Key.F8,             ["ModifierKeys"] = {}},
     ["ReviveDwarf"]          = {["Key"] = Key.F9,             ["ModifierKeys"] = {}},
-    ["ListDwarves"]          = {["Key"] = Key.F3,             ["ModifierKeys"] = {}},
-    ["DwarfStats"]           = {["Key"] = Key.F12,             ["ModifierKeys"] = {}},
+    ["ListDwarves"]          = {["Key"] = Key.F12,             ["ModifierKeys"] = {}},
+    ["RepairArmor"]            = {["Key"] = Key.F7,             ["ModifierKeys"] = {}},
 }
 
 

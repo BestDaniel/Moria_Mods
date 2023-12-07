@@ -58,42 +58,61 @@ end)
 -- ##############################
 
 RegisterKey(Keybinds, "FeedDwarf", function()
+    print("FeedDwarf")
     ExecuteInGameThread(function()  
-        PrintIntro()
-        local PlayerRef = PlayerMainInit()
-        PlayerSetFood(PlayerRef, 100) -- 100 is the max food level, I think above this will be ignored by the game?
+        if not ChatIsChatWindowActive()
+        then
+            PrintIntro()
+            local PlayerRef = PlayerMainInit()
+            PlayerSetFood(PlayerRef, 100) -- 100 is the max food level, I think above this will be ignored by the game?
+        end
     end)
 end)
 
 RegisterKey(Keybinds, "HealDwarf", function()
+    print("HealDwarf")
     ExecuteInGameThread(function()  
-        PrintIntro()
-        local PlayerRef = PlayerMainInit()
-        PlayerSetHealth(PlayerRef, 100)
+        if not ChatIsChatWindowActive()
+        then
+            PrintIntro()
+            local PlayerRef = PlayerMainInit()
+            local Max = PlayerGetMaxHealth(PlayerRef)
+            PlayerSetHealth(PlayerRef, Max)
+        end
     end)
 end)
 
 RegisterKey(Keybinds, "GiveDwarfEnergy", function()
     ExecuteInGameThread(function()  
-        PrintIntro()
-        local PlayerRef = PlayerMainInit()
-        PlayerSetEnergy(PlayerRef, 100) -- 100 is the max level, I think above this will be ignored by the game?
+        if not ChatIsChatWindowActive()
+        then
+            PrintIntro()
+            local PlayerRef = PlayerMainInit()
+            PlayerSetEnergy(PlayerRef, 100) -- 100 is the max level, I think above this will be ignored by the game?
+        end
     end)
 end)
 
 RegisterKey(Keybinds, "GiveDwarfStamina", function()
     ExecuteInGameThread(function()  
-        PrintIntro()
-        local PlayerRef = PlayerMainInit()
-        PlayerSetStamina(PlayerRef, 100)
+        if not ChatIsChatWindowActive()
+        then
+            PrintIntro()
+            local PlayerRef = PlayerMainInit()
+            PlayerSetStamina(PlayerRef, 100)
+        end
     end)
 end)
 
 RegisterKey(Keybinds, "ReviveDwarf", function()
+    print("ReviveDwarf")
     ExecuteInGameThread(function()  
-        PrintIntro()
-        local PlayerRef = PlayerMainInit()
-        PlayerRevive(PlayerRef)
+        if not ChatIsChatWindowActive()
+        then
+            PrintIntro()
+            local PlayerRef = PlayerMainInit()
+            PlayerRevive(PlayerRef)
+        end
     end)
 end)
 
@@ -111,21 +130,16 @@ RegisterKey(Keybinds, "ListDwarves", function()
     end)
 end)
 
-RegisterKey(Keybinds, "DwarfStats", function()
+RegisterKey(Keybinds, "RepairArmor", function()
+    print("RepairArmor")
     ExecuteInGameThread(function()  
-		if not ChatIsChatWindowActive()
+        if not ChatIsChatWindowActive()
         then
-			PrintIntro()
-			local PlayerRef = PlayerMainInit()
-			
-			ChatSendServer(string.format("Character Name: %s", PlayerGetName(PlayerRef)))
-			ChatSendServer(string.format("Is dead: " .. tostring(PlayerRef.bIsDead)))
-
-			ChatSendServer(string.format("Current health %i..",PlayerGetHealth(PlayerRef)))
-			ChatSendServer(string.format("Current Armor %i..",PlayerGetArmor(PlayerRef)))
-			ChatSendServer(string.format("Current Stamina %i..",PlayerGetStamina(PlayerRef)))
-			ChatSendServer(string.format("Max Health %i..",PlayerGetMaxHealth(PlayerRef)))
-			ChatSendServer(string.format("Max Stamina %i..",PlayerGetMaxStamina(PlayerRef)))
-		end
+            PrintIntro()
+            local PlayerRef = PlayerMainInit()
+            local MaxArmor = PlayerGetMaxArmor(PlayerRef)
+            print(string.format("RepairArmor %f", MaxArmor))
+            PlayerSetArmor(PlayerRef, MaxArmor)
+        end
     end)
 end)
