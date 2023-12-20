@@ -24,8 +24,12 @@ SOFTWARE.
 
 -- This file defines a simple chat interface to send messages to the clients and to get the chat history
 
-chatInitialized = false
-chatRefInitialized = false
+require("game")
+
+local chatInitialized = false
+local chatRefInitialized = false
+local chatManagerReference = nil
+local chatWindowReference = nil
 
 local ChatColor = require("chat_color")
 
@@ -34,8 +38,9 @@ function ChatInit()
     -- Only initialize if it hasn't been initialzed yet!
     if not chatInitialized
     then
+        GameRegisterWorldStartedCallback(ChatReset)
 
-        chatInitialized = false
+        print("Initializing chat")
         chatManagerReference = FindFirstOf("MorChatManager") -- reference object used to send messages to the clients
         chatWindowReference = FindFirstOf("WBP_UI_ChatWidget_C") -- reference object used to get a dump / history of the chat window
     
@@ -102,8 +107,7 @@ function ChatVerifyReference()
     if not chatManagerReference:IsValid()
     then
         print("Chat Manager reference not initialized!\n")
-        chatRefInitialized = false
-        chatInitialized = false
+        ChatReset()
         return false
     end
     return true
@@ -122,4 +126,12 @@ function ChatIsChatWindowActive()
         error("Unable to find the Chat window widget.")
     end
     return ChatWidget.isChatActive
+end
+
+--Clears the flags forcing the chat references to be updated on the next usage.  This should be called when a world is just started or ended
+--Tis function is only required for 2.5.2 of UE4SS
+function ChatReset()
+    chatInitialized = false
+    chatRefInitialized = false
+    chatManagerReference = nil
 end

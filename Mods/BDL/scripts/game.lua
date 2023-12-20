@@ -29,3 +29,21 @@ function GameTogglePauseServer()
         PlayerController:ServerPause()
     end
 end
+
+local GameWorldStartedCallbacks = {}
+function GameRegisterWorldStartedCallback(Callback)
+    --First ensure the same callback is not already registered, if it is, don't add it a second time, just return
+    for _, cb in ipairs(GameWorldStartedCallbacks) do
+        if cb == Callback then
+            print("GameRegisterWorldStartedCallback Callback already exists!")
+            return
+        end
+    end
+    table.insert(GameWorldStartedCallbacks, Callback)
+end
+
+RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
+    for I, Callback in ipairs(GameWorldStartedCallbacks) do
+        Callback() -- TODO world context or equivalent object, i.e. world name, etc.
+    end
+end)
